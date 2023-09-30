@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, IconButton } from '@mui/material';
+import { Button, TextField, InputLabel, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 interface PaginatedListProps {
-  uploadedData: any[]; // You can replace 'any' with a more specific type if you have one
+  uploadedData: any[];
+}
+
+interface TableHeaders {
+  [key: string]: string;
 }
 
 const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
   const [listData, setListData] = useState<any[]>([]);
   const [currPageListData, setCurrPageListData] = useState<any[]>([]);
-  const [tableHeaders, setTableHeaders] = useState<string[]>([]);
+  const [tableHeaders, setTableHeaders] = useState<TableHeaders>({});
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalNumPages, setTotalNumPages] = useState<number>(1);
+  const [searchKey, setSearchKey] = useState<string>();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const itemsPerPage = 60;
@@ -31,7 +36,11 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
     if (uploadedData.length > 1) {
       const firstItem = uploadedData[0];
       const headers = Object.keys(firstItem);
-      setTableHeaders(headers);
+      const headerObject: TableHeaders = {};
+      headers.forEach((header, index) => {
+        headerObject[index] = header;
+      });
+      setTableHeaders(headerObject);
     }
   }, [uploadedData]);
 
@@ -45,18 +54,28 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
 
   // Filter data according to search query
   useEffect(() => {
-    if (!uploadedData) return;
+    if (!uploadedData || !searchKey) return;
+
+    const searchColumn = tableHeaders[searchKey];
+
     const filteredData = uploadedData.filter((item) =>
-      getItemValues(item).toLowerCase().includes(searchQuery.toLowerCase())
+      item[searchColumn].includes(searchQuery.toLowerCase())
     );
+
     // Total number of pages
     const numPages = Math.ceil(filteredData.length / itemsPerPage);
     setTotalNumPages(numPages);
     setListData(filteredData);
-  }, [searchQuery, uploadedData]);
+  }, [tableHeaders, searchQuery, searchKey, uploadedData]);
 
+  // Handle field changes
   const handleSearchFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchQuery(event.target.value);
+  }
+
+  const handleChangeSearchKey= (event: SelectChangeEvent) => {
+    setSearchKey(event.target.value);
+    console.log("searchkey", searchKey);
   }
 
   // Handle pagination navigation (e.g., next page, previous page, etc.)
@@ -68,38 +87,52 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
     setCurrentPage(currentPage - 1);
   };
 
-  const getItemValues = (item: any) => {
-    let values = Object.values(item);
-    let output = "";
-    for (let val of values) {
-      output += val;
-    }
-    return output;
-  };
+  // const getItemValues = (item: any) => {
+  //   let values = Object.values(item);
+  //   let output = "";
+  //   for (let val of values) {
+  //     output += val;
+  //   }
+  //   console.log(searchQuery, item, output)
+  //   return output;
+  // };
 
   return (
     <div style={{display:'flex', justifyContent:'center'}}>
-    <div style={{ width: '60%', minWidth: '600px'}}>
-
-      <TextField
-          style={{ width: '100%', marginBottom:'20px' }}
-          id="outlined-textarea"
-          label="Search"
-          placeholder="Search by any value"
-          onChange={handleSearchFieldChange}
-          InputProps={{
-            endAdornment: (
-              <SearchOutlinedIcon fontSize='small'/>
-            ),
-          }}
-          multiline
-        />
-      
-      {currPageListData && (
+    
+      {currPageListData && (<div style={{ width: '60%', minWidth: '600px'}}>
+        <div style={{display:'flex'}}>
+        <TextField
+            style={{ width: '70%', marginBottom:'20px' }}
+            id="outlined-textarea"
+            label="Search"
+            placeholder="Search by any value"
+            onChange={handleSearchFieldChange}
+            InputProps={{
+              endAdornment: (
+                <SearchOutlinedIcon fontSize='small'/>
+              ),
+            }}
+            multiline
+          />
+          <FormControl  style={{ height: '100%', width: '25%', marginLeft:'10px' }}>
+          <InputLabel id="demo-simple-select-label">Search Column</InputLabel>
+          <Select 
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={searchKey}
+            label="Search Column"
+            onChange={handleChangeSearchKey}
+          >
+            {Object.values(tableHeaders).map((colHeader, index) => (<MenuItem value={index}>{colHeader}</MenuItem>))}
+            
+          </Select>
+          </FormControl>
+      </div>
           <table>
             <thead>
               <tr>
-                {tableHeaders.map((header) => (
+                {Object.values(tableHeaders).map((header, index) => (
                   <th key={header}>{header}</th>
                 ))}
               </tr>
@@ -107,16 +140,14 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
             <tbody>
               {currPageListData?.map((item, index) => (
                 <tr key={index} >
-                  {tableHeaders.map((header) => (
+                  {Object.values(tableHeaders).map((header, index) => (
                     <td key={header}>{item[header]}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
-
-      )}
-      <div>
+          <div>
         <Button variant="outlined" size="small" onClick={() => prevPage()} disabled={currentPage === 1}>
           Previous
         </Button>
@@ -131,6 +162,8 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
         </Button>
       </div>
       </div>
+      )}
+      
     </div>
   );
 };
