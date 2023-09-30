@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
+import { Button, Input } from '@mui/material';
 
 interface FileUploadProps {
   setUploadedData: (data: any) => void;
@@ -51,17 +52,19 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
   };
 
   return (
-    <div>
+   <div style={{display:'flex', justifyContent:'center'}}>
+      <div style={{ width: '60%', minWidth: '600px'}}>
       <h1>Upload a CSV File</h1>
-      <input type="file" onChange={handleFileChange} accept={".csv"} />
-      {/* {uploadProgress > 0 && (
-        <div>
-          <progress value={uploadProgress} max="100" />
-          {uploadProgress}% Uploaded
-        </div>
-      )} */}
-      <button onClick={handleUpload}>Upload</button>
+      <Input
+        type="file"
+        //accept=".csv"
+        onChange={handleFileChange}
+        style={{ marginRight: "10px" }} 
+        id="file-input"
+      />
+      <Button variant="contained" onClick={handleUpload}>Upload</Button>
       <p>{uploadStatus}</p>
+      </div>
     </div>
   );
 }

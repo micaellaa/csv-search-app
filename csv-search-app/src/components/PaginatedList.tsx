@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Button, TextField, IconButton } from '@mui/material';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 interface PaginatedListProps {
   uploadedData: any[]; // You can replace 'any' with a more specific type if you have one
@@ -53,6 +55,10 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
     setListData(filteredData);
   }, [searchQuery, uploadedData]);
 
+  const handleSearchFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(event.target.value);
+  }
+
   // Handle pagination navigation (e.g., next page, previous page, etc.)
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -72,40 +78,58 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
   };
 
   return (
-    <div>
+    <div style={{display:'flex', justifyContent:'center'}}>
+    <div style={{ width: '60%', minWidth: '600px'}}>
+
+      <TextField
+          style={{ width: '100%', marginBottom:'20px' }}
+          id="outlined-textarea"
+          label="Search"
+          placeholder="Search by any value"
+          onChange={handleSearchFieldChange}
+          InputProps={{
+            endAdornment: (
+              <SearchOutlinedIcon fontSize='small'/>
+            ),
+          }}
+          multiline
+        />
+      
       {currPageListData && (
-        <table>
-          <thead>
-            <tr>
-              {tableHeaders.map((header) => (
-                <th key={header}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {currPageListData?.map((item, index) => (
-              <tr key={index}>
+          <table>
+            <thead>
+              <tr>
                 {tableHeaders.map((header) => (
-                  <td key={header}>{item[header]}</td>
+                  <th key={header}>{header}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currPageListData?.map((item, index) => (
+                <tr key={index} >
+                  {tableHeaders.map((header) => (
+                    <td key={header}>{item[header]}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
       )}
       <div>
-        <button onClick={() => prevPage()} disabled={currentPage === 1}>
+        <Button variant="outlined" size="small" onClick={() => prevPage()} disabled={currentPage === 1}>
           Previous
-        </button>
-        <span>
+        </Button>
+        <span style={{margin:"10px"}}>
           Page {currentPage} of {totalNumPages}
         </span>
-        <button
+        <Button variant="outlined" size="small"
           onClick={() => nextPage()}
           disabled={currentPage === totalNumPages}
         >
           Next
-        </button>
+        </Button>
+      </div>
       </div>
     </div>
   );

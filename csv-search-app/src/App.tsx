@@ -11,8 +11,10 @@ function App() {
   return (
     <div className="App">
       <FileUpload setUploadedData={setUploadedData} />
-      <PaginatedList uploadedData={uploadedData} />
-    </div>
+     
+        <PaginatedList uploadedData={uploadedData} />
+      </div>
+   
   );
 }
 
