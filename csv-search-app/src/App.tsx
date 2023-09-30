@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
-import './App.css';
+
 // Components
 import FileUpload from './components/FileUpload';
 import PaginatedList from './components/PaginatedList';
@@ -10,9 +9,9 @@ function App() {
 
   return (
     <div className="App">
-      <FileUpload setUploadedData={setUploadedData} />
+      {/* <FileUpload setUploadedData={setUploadedData} />
      
-        <PaginatedList uploadedData={uploadedData} />
+        <PaginatedList uploadedData={uploadedData} /> */}
       </div>
    
   );

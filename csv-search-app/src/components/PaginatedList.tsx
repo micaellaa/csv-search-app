@@ -59,7 +59,7 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
     const searchColumn = tableHeaders[searchKey];
 
     const filteredData = uploadedData.filter((item) =>
-      item[searchColumn].includes(searchQuery.toLowerCase())
+      item[searchColumn].toString().toLowerCase().includes(searchQuery.toString().toLowerCase())
     );
 
     // Total number of pages
