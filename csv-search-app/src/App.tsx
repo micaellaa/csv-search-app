@@ -9,9 +9,9 @@ function App() {
 
   return (
     <div className="App">
-      {/* <FileUpload setUploadedData={setUploadedData} />
+        <FileUpload setUploadedData={setUploadedData} />
      
-        <PaginatedList uploadedData={uploadedData} /> */}
+        <PaginatedList uploadedData={uploadedData} />
       </div>
    
   );

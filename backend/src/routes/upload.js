@@ -21,6 +21,7 @@ const upload = multer({ storage });
 
 // Handle file upload
 router.post("/", upload.single("csvFile"), (req, res) => {
+  console.log("in upload");
   // Check if a file was uploaded
   if (!req.file) {
     return res.status(400).send("No file uploaded.");

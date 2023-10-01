@@ -52,18 +52,21 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
   };
 
   return (
-   <div style={{display:'flex', justifyContent:'center'}}>
+   <div style={{display:'flex', justifyContent:'center'}} data-testid="fileUpload">
       <div style={{ width: '60%', minWidth: '600px'}}>
       <h1>Upload a CSV File</h1>
-      <Input
-        type="file"
-        //accept=".csv"
-        onChange={handleFileChange}
-        style={{ marginRight: "10px" }} 
-        id="file-input"
-      />
-      <Button variant="contained" onClick={handleUpload}>Upload</Button>
-      <p>{uploadStatus}</p>
+      {/* <label htmlFor="file-input"> */}
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+          style={{ marginRight: "10px" }} 
+          id="file-input"
+          data-testid="file-input"
+        />
+        <Button variant="contained" onClick={handleUpload}>Upload</Button>
+      {/* </label> */}
+      <p data-testid="uploadStatus">{uploadStatus}</p>
       </div>
     </div>
   );

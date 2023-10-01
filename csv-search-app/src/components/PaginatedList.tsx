@@ -23,7 +23,7 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
 
   // Process uploaded data: assign to listData, extract headers, get total number of pages
   useEffect(() => {
-    console.log("inpaginated", uploadedData);
+    //console.log("inpaginated", uploadedData);
 
     if (uploadedData) {
       setListData(uploadedData);
@@ -38,6 +38,7 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
       const headers = Object.keys(firstItem);
       const headerObject: TableHeaders = {};
       headers.forEach((header, index) => {
+        //console.log("headerObject[index] = header", index, header )
         headerObject[index] = header;
       });
       setTableHeaders(headerObject);
@@ -98,14 +99,14 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
   // };
 
   return (
-    <div style={{display:'flex', justifyContent:'center'}}>
+    <div style={{display:'flex', justifyContent:'center'}} data-testid="paginatedList">
     
       {currPageListData && (<div style={{ width: '60%', minWidth: '600px'}}>
         <div style={{display:'flex'}}>
         <TextField
             style={{ width: '70%', marginBottom:'20px' }}
             id="outlined-textarea"
-            label="Search"
+            label="search-field"
             placeholder="Search by any value"
             onChange={handleSearchFieldChange}
             InputProps={{
@@ -116,23 +117,28 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
             multiline
           />
           <FormControl  style={{ height: '100%', width: '25%', marginLeft:'10px' }}>
-          <InputLabel id="demo-simple-select-label">Search Column</InputLabel>
+          <InputLabel htmlFor="demo-simple-select" id="demo-simple-select-label">Search Column</InputLabel>
+
           <Select 
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={searchKey}
-            label="Search Column"
+            label="search-column"
+            data-testid="search-column"
             onChange={handleChangeSearchKey}
+            native={true}
+            defaultValue="0"
           >
-            {Object.values(tableHeaders).map((colHeader, index) => (<MenuItem value={index}>{colHeader}</MenuItem>))}
+            {Object.values(tableHeaders).map((colHeader, index) => (<option key={colHeader} value={index}>{colHeader}</option>))}
             
           </Select>
+
           </FormControl>
       </div>
           <table>
             <thead>
               <tr>
-                {Object.values(tableHeaders).map((header, index) => (
+                {tableHeaders && Object.values(tableHeaders).map((header, index) => (
                   <th key={header}>{header}</th>
                 ))}
               </tr>
