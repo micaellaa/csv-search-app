@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, InputLabel, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { isNullishCoalesce } from "typescript";
 
 interface PaginatedListProps {
   uploadedData: any[];
@@ -11,12 +12,12 @@ interface TableHeaders {
 }
 
 const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
-  const [listData, setListData] = useState<any[]>([]);
+  const [listData, setListData] = useState<any[] | null>(null);
   const [currPageListData, setCurrPageListData] = useState<any[]>([]);
   const [tableHeaders, setTableHeaders] = useState<TableHeaders>({});
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalNumPages, setTotalNumPages] = useState<number>(1);
-  const [searchKey, setSearchKey] = useState<string>();
+  const [searchKey, setSearchKey] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const itemsPerPage = 60;
@@ -55,18 +56,18 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
 
   // Filter data according to search query
   useEffect(() => {
-    if (!uploadedData || !searchKey) return;
+    if (!uploadedData || !searchKey || searchKey === "") return;
 
     const searchColumn = tableHeaders[searchKey];
 
     const filteredData = uploadedData.filter((item) =>
       item[searchColumn].toString().toLowerCase().includes(searchQuery.toString().toLowerCase())
     );
+    setListData(filteredData);
 
     // Total number of pages
     const numPages = Math.ceil(filteredData.length / itemsPerPage);
     setTotalNumPages(numPages);
-    setListData(filteredData);
   }, [tableHeaders, searchQuery, searchKey, uploadedData]);
 
   // Handle field changes
@@ -101,12 +102,13 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
   return (
     <div style={{display:'flex', justifyContent:'center'}} data-testid="paginatedList">
     
-      {currPageListData && (<div style={{ width: '60%', minWidth: '600px'}}>
+      {listData && (<div style={{ width: '60%', minWidth: '650px'}}>
         <div style={{display:'flex'}}>
         <TextField
             style={{ width: '70%', marginBottom:'20px' }}
             id="outlined-textarea"
-            label="search-field"
+            label="Search"
+            data-testid="search-field"
             placeholder="Search by any value"
             onChange={handleSearchFieldChange}
             InputProps={{
@@ -127,8 +129,8 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
             data-testid="search-column"
             onChange={handleChangeSearchKey}
             native={true}
-            defaultValue="0"
           >
+            <option value=""></option>
             {Object.values(tableHeaders).map((colHeader, index) => (<option key={colHeader} value={index}>{colHeader}</option>))}
             
           </Select>
@@ -162,7 +164,7 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
         </span>
         <Button variant="outlined" size="small"
           onClick={() => nextPage()}
-          disabled={currentPage === totalNumPages}
+          disabled={currentPage >= totalNumPages}
         >
           Next
         </Button>

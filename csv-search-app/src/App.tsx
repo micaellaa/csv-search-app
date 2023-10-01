@@ -11,7 +11,7 @@ function App() {
     <div className="App">
         <FileUpload setUploadedData={setUploadedData} />
      
-        <PaginatedList uploadedData={uploadedData} />
+        {uploadedData.length > 0 && (<PaginatedList uploadedData={uploadedData} />)}
       </div>
    
   );

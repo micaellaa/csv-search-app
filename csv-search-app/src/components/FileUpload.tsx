@@ -54,7 +54,7 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
   return (
    <div style={{display:'flex', justifyContent:'center'}} data-testid="fileUpload">
       <div style={{ width: '60%', minWidth: '600px'}}>
-      <h1>Upload a CSV File</h1>
+      <h3>Upload a CSV File</h3>
       {/* <label htmlFor="file-input"> */}
         <input
           type="file"
