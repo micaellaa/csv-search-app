@@ -9,7 +9,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Getting Started
 
-To set up and run the project:
+To set up and run the project: 
 
 1. Clone the repository (if you haven't already). Enter the following into your terminal:
 
