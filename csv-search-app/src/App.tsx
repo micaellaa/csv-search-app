@@ -12,7 +12,7 @@ function App() {
       <head>
         <title>React App</title>
       </head>
-      <FileUpload uploadedData={uploadedData} setUploadedData={setUploadedData} />
+      <FileUpload setUploadedData={setUploadedData} />
       {uploadedData.length > 0 && (<PaginatedList uploadedData={uploadedData} />)}
     </div>
    
