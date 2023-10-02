@@ -29,9 +29,12 @@ To set up and run the project:
    Ensure that you are not inside the project frontend folder before running the next commands.
 3. Install dependencies for the frontend and backend:
    ```bash
+   npm install concurrently
+   ```
+   ```bash
    npm run install-all
    ```
-4. Start the frontend and backend concurrently:
+5. Start the frontend and backend concurrently:
    ```bash
    npm start
    ```
