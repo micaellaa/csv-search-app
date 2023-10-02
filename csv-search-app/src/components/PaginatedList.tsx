@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, InputLabel, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import './css/PaginatedList.css';
+import {
+  Button,
+  TextField,
+  InputLabel,
+  Select,
+  FormControl,
+  SelectChangeEvent,
+} from "@mui/material";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import "./css/PaginatedList.css";
 
 interface PaginatedListProps {
   uploadedData: any[];
@@ -24,11 +31,8 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
 
   // Process uploaded data: assign to listData, extract headers, get total number of pages
   useEffect(() => {
-    //console.log("inpaginated", uploadedData);
-
     if (uploadedData) {
       setListData(uploadedData);
-
       const numPages = Math.ceil(uploadedData.length / itemsPerPage);
       setTotalNumPages(numPages);
     } else {
@@ -61,7 +65,10 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
     const searchColumn = tableHeaders[searchKey];
 
     const filteredData = uploadedData.filter((item) =>
-      item[searchColumn].toString().toLowerCase().includes(searchQuery.toString().toLowerCase())
+      item[searchColumn]
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toString().toLowerCase())
     );
     setListData(filteredData);
 
@@ -71,14 +78,16 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
   }, [tableHeaders, searchQuery, searchKey, uploadedData]);
 
   // Handle field changes
-  const handleSearchFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleSearchFieldChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setSearchQuery(event.target.value);
-  }
+  };
 
-  const handleChangeSearchKey= (event: SelectChangeEvent) => {
+  const handleChangeSearchKey = (event: SelectChangeEvent) => {
     setSearchKey(event.target.value);
     console.log("searchkey", searchKey);
-  }
+  };
 
   // Handle pagination navigation (e.g., next page, previous page, etc.)
   const nextPage = () => {
@@ -89,65 +98,66 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
     setCurrentPage(currentPage - 1);
   };
 
-  // const getItemValues = (item: any) => {
-  //   let values = Object.values(item);
-  //   let output = "";
-  //   for (let val of values) {
-  //     output += val;
-  //   }
-  //   console.log(searchQuery, item, output)
-  //   return output;
-  // };
-
   return (
-    <div style={{display:'flex', justifyContent:'center'}} data-testid="paginatedList">
-    
-      {listData && (<div style={{ width: '60%', minWidth: '650px'}}>
-        <div style={{display:'flex'}}>
-        <TextField
-            style={{ width: '70%', marginBottom:'20px' }}
-            id="outlined-textarea"
-            label="Search"
-            data-testid="search-field"
-            placeholder="Search by any value"
-            onChange={handleSearchFieldChange}
-            InputProps={{
-              endAdornment: (
-                <SearchOutlinedIcon fontSize='small'/>
-              ),
-            }}
-            multiline
-          />
-          <FormControl  style={{ height: '100%', width: '25%', marginLeft:'10px' }}>
-          <InputLabel htmlFor="demo-simple-select" id="demo-simple-select-label">Search Column</InputLabel>
+    <div
+      style={{ display: "flex", justifyContent: "center" }}
+      data-testid="paginatedList"
+    >
+      {listData && (
+        <div style={{ width: "60%", minWidth: "650px" }}>
+          <div style={{ display: "flex" }}>
+            <TextField
+              style={{ width: "70%", marginBottom: "20px" }}
+              id="outlined-textarea"
+              label="Search"
+              data-testid="search-field"
+              placeholder="Search by any value"
+              onChange={handleSearchFieldChange}
+              InputProps={{
+                endAdornment: <SearchOutlinedIcon fontSize="small" />,
+              }}
+              multiline
+            />
+            <FormControl
+              style={{ height: "100%", width: "25%", marginLeft: "10px" }}
+            >
+              <InputLabel
+                htmlFor="demo-simple-select"
+                id="demo-simple-select-label"
+              >
+                Search Column
+              </InputLabel>
 
-          <Select 
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={searchKey}
-            label="search-column"
-            data-testid="search-column"
-            onChange={handleChangeSearchKey}
-            native={true}
-          >
-            <option value=""></option>
-            {Object.values(tableHeaders).map((colHeader, index) => (<option key={colHeader} value={index}>{colHeader}</option>))}
-            
-          </Select>
-
-          </FormControl>
-      </div>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={searchKey}
+                label="search-column"
+                data-testid="search-column"
+                onChange={handleChangeSearchKey}
+                native={true}
+              >
+                <option value=""></option>
+                {Object.values(tableHeaders).map((colHeader, index) => (
+                  <option key={colHeader} value={index}>
+                    {colHeader}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <table className="listDataTable">
             <thead>
               <tr>
-                {tableHeaders && Object.values(tableHeaders).map((header, index) => (
-                  <th key={header}>{header}</th>
-                ))}
+                {tableHeaders &&
+                  Object.values(tableHeaders).map((header, index) => (
+                    <th key={header}>{header}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
               {currPageListData?.map((item, index) => (
-                <tr key={index} >
+                <tr key={index}>
                   {Object.values(tableHeaders).map((header, index) => (
                     <td key={header}>{item[header]}</td>
                   ))}
@@ -155,24 +165,29 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
               ))}
             </tbody>
           </table>
-      <div style={{display: "flex", justifyContent: "center"}}>
-
-        <Button variant="outlined" size="small" onClick={() => prevPage()} disabled={currentPage === 1}>
-          Previous
-        </Button>
-        <span style={{margin:"10px"}}>
-          Page {currentPage} of {totalNumPages}
-        </span>
-        <Button variant="outlined" size="small"
-          onClick={() => nextPage()}
-          disabled={currentPage >= totalNumPages}
-        >
-          Next
-        </Button>
-      </div>
-      </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => prevPage()}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span style={{ margin: "10px" }}>
+              Page {currentPage} of {totalNumPages}
+            </span>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => nextPage()}
+              disabled={currentPage >= totalNumPages}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       )}
-      
     </div>
   );
 };
