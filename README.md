@@ -21,8 +21,13 @@ To set up and run the project:
 
 ## Running the Application
 
-1. Navigate to the project's root directory
-2. Install dependencies for the frontend and backend:
+1. Navigate to the project's root directory.
+   ```bash
+   cd csv-search-app
+   ```
+   Check that the content of this directory includes folders like "backend", and "csv-search-app" (the frontend project folder).
+   Ensure that you are not inside the project frontend folder before running the next commands.
+3. Install dependencies for the frontend and backend:
    ```bash
    npm run install-all
    ```
