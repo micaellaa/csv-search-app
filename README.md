@@ -14,7 +14,7 @@ To set up and run the project:
 1. Clone the repository (if you haven't already):
 
    ```bash
-   git clone https://github.com/micaellaa/csv-search-app
+   git clone https://github.com/micaellaa/csv-search-app.git
    ```
 
    Alternatively, you can download the project as a ZIP archive from GitHub.
