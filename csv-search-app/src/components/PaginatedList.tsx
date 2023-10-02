@@ -24,16 +24,19 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
 
   // Process uploaded data: assign to listData, extract headers, get total number of pages
   useEffect(() => {
-    //console.log("inpaginated", uploadedData);
-
     if (uploadedData) {
       setListData(uploadedData);
 
+      // Reset states
+      setCurrentPage(1);
+      setSearchKey("");
+      setSearchQuery("");
       const numPages = Math.ceil(uploadedData.length / itemsPerPage);
       setTotalNumPages(numPages);
     } else {
       return;
     }
+    // Reset morestates
     if (uploadedData.length > 1) {
       const firstItem = uploadedData[0];
       const headers = Object.keys(firstItem);
@@ -88,16 +91,6 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
   };
-
-  // const getItemValues = (item: any) => {
-  //   let values = Object.values(item);
-  //   let output = "";
-  //   for (let val of values) {
-  //     output += val;
-  //   }
-  //   console.log(searchQuery, item, output)
-  //   return output;
-  // };
 
   return (
     <div style={{display:'flex', justifyContent:'center'}} data-testid="paginatedList">

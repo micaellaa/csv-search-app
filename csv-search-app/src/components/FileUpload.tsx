@@ -1,15 +1,23 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { Button, Input } from '@mui/material';
 import './css/FileUpload.css';
 
 interface FileUploadProps {
+  uploadedData: any[];
   setUploadedData: (data: any) => void;
 }
 
-function FileUpload({ setUploadedData }: FileUploadProps) {
+function FileUpload({ uploadedData, setUploadedData }: FileUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [uploadResponseOk, setUploadResponseOk] = useState<boolean>(false);
+  const [isDataUploaded, setIsDataUploaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (uploadedData && uploadedData.length >= 1) {
+      setIsDataUploaded(true);
+    }
+  }, [uploadedData])
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -43,7 +51,6 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
           setUploadResponseOk(true)
           setUploadStatus("Successfully uploaded file.");
           setUploadedData(fileData);
-          //console.log("fileData", fileData);
         }
       } catch (error) {
         let message = (error as Error).message;
@@ -52,6 +59,10 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
       }
     }
   };
+
+  const handleClearData = () => {
+    window.location.reload();
+  }
 
   return (
    <div style={{display:'flex', justifyContent:'center'}} data-testid="fileUpload">
@@ -65,8 +76,12 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
           id="file-input"
           data-testid="file-input"
           className="custom-file-input"
+          disabled={isDataUploaded}
         />
-        <Button variant="contained" onClick={handleUpload} style={{ width: "20%"}} >Upload</Button>
+        {isDataUploaded ? 
+          (<Button variant="contained" onClick={handleClearData} style={{ width: "20%", backgroundColor: "#717f91"}} >Clear Data</Button>) :
+          (<Button variant="contained" onClick={handleUpload} style={{ width: "20%"}} >Upload</Button>)
+        }
       <p data-testid="uploadStatus" style={{color: uploadResponseOk ? '#32612D' : '#7C0A02'}}>{uploadStatus}</p>
       </div>
     </div>
