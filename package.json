@@ -10,7 +10,7 @@
     "start-backend": "cd backend && npm start",
     "install-all": "concurrently \"npm run install-frontend\" \"npm run install-backend\"",
     "install-frontend": "cd csv-search-app && npm install",
-    "install-backend": "cd csv-search-app && npm install"
+    "install-backend": "cd backend && npm install"
   },
   "keywords": [],
   "author": "",
