@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import { Button, Input } from '@mui/material';
+import './css/FileUpload.css';
 
 interface FileUploadProps {
   setUploadedData: (data: any) => void;
@@ -8,7 +9,7 @@ interface FileUploadProps {
 function FileUpload({ setUploadedData }: FileUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>("");
-  //const [uploadProgress, setUploadProgress] = useState(null);
+  const [uploadResponseOk, setUploadResponseOk] = useState<boolean>(false);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -35,13 +36,14 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
         });
         if (!response.ok) {
           const errorMessage = await response.json();
-          console.log("errorMEssage", errorMessage);
+          //console.log("errorMessage", errorMessage);
         } else {
           const fileObj = await response.json();
           const fileData = fileObj.data
+          setUploadResponseOk(true)
           setUploadStatus("Successfully uploaded file.");
           setUploadedData(fileData);
-          console.log("fileData", fileData);
+          //console.log("fileData", fileData);
         }
       } catch (error) {
         let message = (error as Error).message;
@@ -53,20 +55,19 @@ function FileUpload({ setUploadedData }: FileUploadProps) {
 
   return (
    <div style={{display:'flex', justifyContent:'center'}} data-testid="fileUpload">
-      <div style={{ width: '60%', minWidth: '600px'}}>
+      <div style={{ width: '60%', minWidth: '650px'}}>
       <h3>Upload a CSV File</h3>
-      {/* <label htmlFor="file-input"> */}
         <input
           type="file"
           accept=".csv"
           onChange={handleFileChange}
-          style={{ marginRight: "10px" }} 
+          style={{ marginRight: "10px", width: "70%"}} 
           id="file-input"
           data-testid="file-input"
+          className="custom-file-input"
         />
-        <Button variant="contained" onClick={handleUpload}>Upload</Button>
-      {/* </label> */}
-      <p data-testid="uploadStatus">{uploadStatus}</p>
+        <Button variant="contained" onClick={handleUpload} style={{ width: "20%"}} >Upload</Button>
+      <p data-testid="uploadStatus" style={{color: uploadResponseOk ? '#32612D' : '#7C0A02'}}>{uploadStatus}</p>
       </div>
     </div>
   );

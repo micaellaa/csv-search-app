@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, InputLabel, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { isNullishCoalesce } from "typescript";
+import './css/PaginatedList.css';
 
 interface PaginatedListProps {
   uploadedData: any[];
@@ -137,7 +137,7 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
 
           </FormControl>
       </div>
-          <table>
+          <table className="listDataTable">
             <thead>
               <tr>
                 {tableHeaders && Object.values(tableHeaders).map((header, index) => (
@@ -155,7 +155,8 @@ const PaginatedList = ({ uploadedData }: PaginatedListProps) => {
               ))}
             </tbody>
           </table>
-          <div>
+      <div style={{display: "flex", justifyContent: "center"}}>
+
         <Button variant="outlined" size="small" onClick={() => prevPage()} disabled={currentPage === 1}>
           Previous
         </Button>

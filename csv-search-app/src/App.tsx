@@ -9,10 +9,12 @@ function App() {
 
   return (
     <div className="App">
-        <FileUpload setUploadedData={setUploadedData} />
-     
-        {uploadedData.length > 0 && (<PaginatedList uploadedData={uploadedData} />)}
-      </div>
+      <head>
+        <title>React App</title>
+      </head>
+      <FileUpload setUploadedData={setUploadedData} />
+      {uploadedData.length > 0 && (<PaginatedList uploadedData={uploadedData} />)}
+    </div>
    
   );
 }

@@ -1,0 +1,16 @@
+
+/* FileUpload*/
+.custom-file-input {
+  display: inline-block;
+  background-color: #5a90d6; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 9px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.custom-file-input:hover {
+  background-color: #2f76d2; /* Darker blue on hover */
+  box-shadow: 10px 10px 5px 12px;
+}
